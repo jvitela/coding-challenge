@@ -1,0 +1,4 @@
+.ui.menu .item.header--title {
+  justify-content: center;
+  flex-grow: 1;
+}
