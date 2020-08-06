@@ -1,102 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Form, Dropdown } from "semantic-ui-react";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  Header,
-  Menu,
-  Form,
-  Dropdown,
-  Segment,
-  Button,
-} from "semantic-ui-react";
+  selectStatus,
+  selectActiveBrand,
+  selectBrandOptions,
+} from "store/products/selectors";
+import { fetchBrands, fetchBrandProducts } from "store/products/slice";
+import { STATUS } from "store/products/constants";
 
-const brandNames = [
-  "almay",
-  "alva",
-  "anna sui",
-  "annabelle",
-  "benefit",
-  "boosh",
-  "burt's bees",
-  "butter london",
-  "c'est moi",
-  "cargo cosmetics",
-  "china glaze",
-  "clinique",
-  "coastal classic creation",
-  "colourpop",
-  "covergirl",
-  "dalish",
-  "deciem",
-  "dior",
-  "dr. hauschka",
-  "e.l.f.",
-  "essie",
-  "fenty",
-  "glossier",
-  "green people",
-  "iman",
-  "l'oreal",
-  "lotus cosmetics usa",
-  "maia's mineral galaxy",
-  "marcelle",
-  "marienatie",
-  "maybelline",
-  "milani",
-  "mineral fusion",
-  "misa",
-  "mistura",
-  "moov",
-  "nudus",
-  "nyx",
-  "orly",
-  "pacifica",
-  "penny lane organics",
-  "physicians formula",
-  "piggy paint",
-  "pure anada",
-  "rejuva minerals",
-  "revlon",
-  "sally b's skin yummies",
-  "salon perfect",
-  "sante",
-  "sinful colours",
-  "smashbox",
-  "stila",
-  "suncoat",
-  "w3llpeople",
-  "wet n wild",
-  "zorah",
-  "zorah biocosmetiques",
-];
-
-function getBrandOptions() {
-  return brandNames.map((name, idx) => ({
-    key: idx,
-    text: name,
-    value: name,
-  }));
+function useBrandOptions() {
+  const dispatch = useDispatch();
+  const status = useSelector(selectStatus);
+  const brandOptions = useSelector(selectBrandOptions);
+  const isEmpty = status === STATUS.INITIAL && brandOptions.length === 0;
+  useEffect(
+    function loadBrandNames() {
+      if (isEmpty) {
+        dispatch(fetchBrands());
+      }
+    },
+    [isEmpty, dispatch]
+  );
+  return brandOptions;
 }
 
-export default function ProductsListFilters({ onClick }) {
+export default function ProductsListFilters() {
+  const brandOptions = useBrandOptions(selectBrandOptions);
+  const dispatch = useDispatch();
+  const brand = useSelector(selectActiveBrand);
+  const selectBrand = (_, data) => {
+    dispatch(fetchBrandProducts(data.value));
+  };
   return (
-    <Segment>
-      <Menu borderless secondary>
-        <Menu.Item header className="header--title">
-          <Header as="h1">Filters</Header>
-        </Menu.Item>
-        <Menu.Item>
-          <Button circular icon="close" onClick={onClick} />
-        </Menu.Item>
-      </Menu>
-      <Form>
-        <Form.Field>
-          <label>Brand Name</label>
-          <Dropdown search selection options={getBrandOptions()} />
-        </Form.Field>
-        <Form.Field>
-          <label>Product Name</label>
-          <input />
-        </Form.Field>
-      </Form>
-    </Segment>
+    <Form>
+      <Form.Field>
+        <label>Brand Name</label>
+        <Dropdown
+          search
+          selection
+          value={brand}
+          options={brandOptions}
+          onChange={selectBrand}
+        />
+      </Form.Field>
+      <Form.Field>
+        <label>Product Name</label>
+        <input />
+      </Form.Field>
+    </Form>
   );
 }
