@@ -1,63 +1,70 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import makeUpApi from "api/makeUp";
+import brandProducts from "store/products/reducers/brandProducts";
+import productDetails from "store/products/reducers/productDetails";
+import brandsList from "store/products/reducers/brandsList";
 import {
-  createSelector,
-  createSlice,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
-import { makeUpApi } from "../../api/makeUp";
+  PRODUCTS,
+  FETCH_BRANDS,
+  FETCH_PRODUCT,
+  FETCH_BRAND_PRODUCTS,
+  STATUS,
+} from "store/products/constants";
 
-const SLICE_ID = "Products";
-
+/**
+ * Fetch one product details
+ */
 export const fetchProduct = createAsyncThunk(
-  `${SLICE_ID}/fetchProduct`,
+  FETCH_PRODUCT,
   async (pid) => await makeUpApi.getProduct(pid)
 );
 
-const selectError = (state) => state[SLICE_ID].error;
-const selectStatus = (state) => state[SLICE_ID].status;
-const selectProducts = (state) => state[SLICE_ID].products;
-
-export const selectProductDetail = createSelector(
-  selectError,
-  selectStatus,
-  selectProducts,
-  (_, pid) => pid,
-  (error, status, products, pid) => {
-    const loading = status === fetchProduct.pending.toString();
-    const data = products[pid];
-    const shouldFetch = !data && !loading;
-    return {
-      error,
-      loading,
-      data,
-      shouldFetch,
-    };
-  }
+/**
+ * Fetch a list of product details filtered by brand
+ */
+export const fetchBrandProducts = createAsyncThunk(
+  FETCH_BRAND_PRODUCTS,
+  async (brand) => await makeUpApi.getAllProducts({ brand })
 );
 
+/**
+ * Fetch a list of product details filtered by brand
+ */
+export const fetchBrands = createAsyncThunk(
+  FETCH_BRANDS,
+  async () => await makeUpApi.getAllBrands()
+);
+
+/**
+ * The store slice
+ */
 export const Products = createSlice({
-  name: SLICE_ID,
+  name: PRODUCTS,
 
   initialState: {
-    status: `${SLICE_ID}/initial`,
+    status: STATUS.INITIAL,
+    filters: {},
     products: {},
+    brands: [],
   },
 
+  // reducers: {
+  //   filterByBrand: (state, action) => {
+  //     state.filters.brand = action.payload;
+  //   },
+  // },
+
   extraReducers: {
-    [fetchProduct.pending]: (state, action) => {
-      state.status = action.type;
-    },
+    [fetchBrandProducts.pending]: brandProducts.pending,
+    [fetchBrandProducts.fulfilled]: brandProducts.fulfilled,
+    [fetchBrandProducts.rejected]: brandProducts.rejected,
 
-    [fetchProduct.fulfilled]: (state, action) => {
-      const product = action.payload;
-      state.status = action.type;
-      state.products[product.id] = product;
-      state.filter = { brand: product.brand };
-    },
+    [fetchProduct.pending]: productDetails.pending,
+    [fetchProduct.fulfilled]: productDetails.fulfilled,
+    [fetchProduct.rejected]: productDetails.rejected,
 
-    [fetchProduct.rejected]: (state, action) => {
-      state.status = `${SLICE_ID}/initial`;
-      state.error = action.error;
-      console.log(action);
-    },
+    [fetchBrands.pending]: brandsList.pending,
+    [fetchBrands.fulfilled]: brandsList.fulfilled,
+    [fetchBrands.rejected]: brandsList.rejected,
   },
 });
