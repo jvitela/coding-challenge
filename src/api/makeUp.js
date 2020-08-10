@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky from "ky/umd"; // https://github.com/sindresorhus/ky/issues/170
 import brandNames from "api/brandNames";
 
 const httpClient = ky.extend({
