@@ -35,20 +35,20 @@ export default function ProductsListFilters() {
 
   return (
     <Form>
-      <Form.Field as="label">
-        Brand Name
-        <Dropdown
-          search
-          selection
-          value={brand}
-          options={brandOptions}
-          onChange={selectBrand}
-        />
+      <Form.Field>
+        <label>
+          Brand Name
+          <Dropdown
+            search
+            selection
+            className="dropdown--brandName"
+            value={brand}
+            options={brandOptions}
+            onChange={selectBrand}
+          />
+        </label>
       </Form.Field>
-      <Form.Field as="label">
-        Product Name
-        <input />
-      </Form.Field>
+      <Form.Input label="Product Name" id="productName" />
     </Form>
   );
 }

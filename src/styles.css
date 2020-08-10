@@ -2,3 +2,8 @@
   justify-content: center;
   flex-grow: 1;
 }
+
+.ui.selection.dropdown--brandName {
+  display: block;
+  margin-top: 0.5rem;
+}
