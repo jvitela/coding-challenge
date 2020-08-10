@@ -19,8 +19,13 @@ function getProduct(pid) {
  * TODO: Validate input
  * @param {object} searchParams
  */
-function getAllProducts(searchParams) {
-  return httpClient.get(`products.json`, { searchParams }).json();
+async function getAllProducts(searchParams) {
+  const result = {};
+  const products = await httpClient
+    .get(`products.json`, { searchParams })
+    .json();
+  products.forEach((product) => (result[product.id] = product));
+  return result;
 }
 
 /**

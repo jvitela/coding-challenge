@@ -12,6 +12,7 @@ import {
   STATUS,
 } from "store/products/constants";
 import createDebouncedAction from "store/createDebouncedAction";
+import _memoize from "lodash.memoize";
 
 const FILTER_DEBOUNCE_MILLISECONDS = 300;
 
@@ -28,12 +29,9 @@ export const fetchProduct = createAsyncThunk(
  */
 export const fetchBrandProducts = createAsyncThunk(
   FETCH_BRAND_PRODUCTS,
-  async (brand) => {
-    const products = await makeUpApi.getAllProducts({ brand });
-    const result = {};
-    products.forEach((product) => (result[product.id] = product));
-    return result;
-  }
+  _memoize(
+    async (brand, { getState }) => await makeUpApi.getAllProducts({ brand })
+  )
 );
 
 /**
