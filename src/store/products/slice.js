@@ -28,7 +28,12 @@ export const fetchProduct = createAsyncThunk(
  */
 export const fetchBrandProducts = createAsyncThunk(
   FETCH_BRAND_PRODUCTS,
-  async (brand) => await makeUpApi.getAllProducts({ brand })
+  async (brand) => {
+    const products = await makeUpApi.getAllProducts({ brand });
+    const result = {};
+    products.forEach((product) => (result[product.id] = product));
+    return result;
+  }
 );
 
 /**

@@ -11,7 +11,12 @@ export const selectProducts = createSelector(
   selectActiveBrand,
   selectFilters,
   (state) => state[PRODUCTS].products,
-  (brand, filters, products) => applyFilters(filters, products[brand])
+  (brand, filters, productsByBrand) => {
+    const products = productsByBrand[brand]
+      ? Object.values(productsByBrand[brand])
+      : [];
+    return applyFilters(filters, products);
+  }
 );
 
 export const selectProductDetail = createSelector(
