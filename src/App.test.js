@@ -1,11 +1,10 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+import { Server } from "miragejs";
 import { Provider } from "react-redux";
 import { createStore } from "store";
 import App from "App";
-
-import { Server } from "miragejs";
 
 let server;
 
@@ -31,6 +30,7 @@ beforeEach(() => {
       ]);
     },
   });
+  server.logging = false;
 });
 
 afterEach(() => {
