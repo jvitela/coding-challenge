@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { PRODUCTS, STATUS } from "store/products/constants";
+import { PRODUCTS } from "store/products/constants";
 
 export const selectStatus = (state) => state[PRODUCTS].status;
 export const selectError = (state) => state[PRODUCTS].error;
