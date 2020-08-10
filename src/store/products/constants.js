@@ -2,6 +2,7 @@ export const PRODUCTS = "Products";
 export const FETCH_BRANDS = `${PRODUCTS}/fetchBrands`;
 export const FETCH_PRODUCT = `${PRODUCTS}/fetchProduct`;
 export const FETCH_BRAND_PRODUCTS = `${PRODUCTS}/fetchBrandProducts`;
+export const FILTER_BY_NAME = `${PRODUCTS}/filterByName`;
 export const STATUS = {
   INITIAL: "initial",
   BRANDS_LIST_LOADING: "brandsList/loading",

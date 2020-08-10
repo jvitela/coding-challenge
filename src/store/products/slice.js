@@ -5,11 +5,15 @@ import productDetails from "store/products/reducers/productDetails";
 import brandsList from "store/products/reducers/brandsList";
 import {
   PRODUCTS,
+  FILTER_BY_NAME,
   FETCH_BRANDS,
   FETCH_PRODUCT,
   FETCH_BRAND_PRODUCTS,
   STATUS,
 } from "store/products/constants";
+import createDebouncedAction from "store/createDebouncedAction";
+
+const FILTER_DEBOUNCE_MILLISECONDS = 300;
 
 /**
  * Fetch one product details
@@ -36,6 +40,14 @@ export const fetchBrands = createAsyncThunk(
 );
 
 /**
+ * Set filter by product name
+ */
+export const filterByName = createDebouncedAction(
+  FILTER_BY_NAME,
+  FILTER_DEBOUNCE_MILLISECONDS
+);
+
+/**
  * The store slice
  */
 export const Products = createSlice({
@@ -48,13 +60,11 @@ export const Products = createSlice({
     brands: [],
   },
 
-  // reducers: {
-  //   filterByBrand: (state, action) => {
-  //     state.filters.brand = action.payload;
-  //   },
-  // },
-
   extraReducers: {
+    [FILTER_BY_NAME]: (state, action) => {
+      state.filters.name = action.payload;
+    },
+
     [fetchBrandProducts.pending]: brandProducts.pending,
     [fetchBrandProducts.fulfilled]: brandProducts.fulfilled,
     [fetchBrandProducts.rejected]: brandProducts.rejected,

@@ -6,7 +6,11 @@ import {
   selectActiveBrand,
   selectBrandOptions,
 } from "store/products/selectors";
-import { fetchBrands, fetchBrandProducts } from "store/products/slice";
+import {
+  fetchBrands,
+  fetchBrandProducts,
+  filterByName,
+} from "store/products/slice";
 import { STATUS } from "store/products/constants";
 
 function useBrandOptions() {
@@ -32,6 +36,9 @@ export default function ProductsListFilters() {
   const selectBrand = (_, data) => {
     dispatch(fetchBrandProducts(data.value));
   };
+  const searchName = (_, data) => {
+    dispatch(filterByName(data.value));
+  };
 
   return (
     <Form>
@@ -48,7 +55,12 @@ export default function ProductsListFilters() {
           />
         </label>
       </Form.Field>
-      <Form.Input label="Product Name" id="productName" />
+      <Form.Input
+        label="Product Name"
+        id="productName"
+        disabled={!brand}
+        onChange={searchName}
+      />
     </Form>
   );
 }
