@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -8,21 +8,28 @@ import {
   Image,
   Icon,
   Popup,
+  Placeholder,
 } from "semantic-ui-react";
-import { useSelector } from "react-redux";
-import { selectProductDetail } from "store/products/selectors";
-
-// const colors = [
-//   { hex_value: "#EC8389", colour_name: "Peaching To The Choir " },
-//   { hex_value: "#C7797B", colour_name: "Passionate Plum " },
-//   { hex_value: "#EE8581", colour_name: "Luv Me Gently " },
-//   { hex_value: "#E88C90", colour_name: "Get Me To The Alter " },
-//   { hex_value: "#F591A6", colour_name: "Cheeky Cherub " },
-// ];
+import { useSelector, useDispatch } from "react-redux";
+import { selectProductDetail, selectStatus } from "store/products/selectors";
+import { fetchProduct } from "store/products/slice";
+import { STATUS } from "store/products/constants";
 
 function useProductDetail(pid) {
   const product = useSelector((state) => selectProductDetail(state, pid));
-  return product;
+  const dispatch = useDispatch();
+  const status = useSelector(selectStatus);
+  const isEmpty = status === STATUS.INITIAL && !product;
+  useEffect(
+    function loadProductDetails() {
+      if (isEmpty) {
+        dispatch(fetchProduct(pid));
+      }
+    },
+    [isEmpty, dispatch, pid]
+  );
+
+  return product || {};
 }
 
 export default function ProductDetail() {
@@ -34,6 +41,14 @@ export default function ProductDetail() {
         <h1>
           <small className="ui container text small">{product.brand}</small>
           <span>{product.name}</span>
+          {!product.name && (
+            <Placeholder>
+              <Placeholder.Header>
+                <Placeholder.Line />
+                <Placeholder.Line />
+              </Placeholder.Header>
+            </Placeholder>
+          )}
         </h1>
         <Rating
           icon="star"
@@ -44,15 +59,29 @@ export default function ProductDetail() {
         {product.rating === null && <small>(n/a)</small>}
       </Header>
       <Segment placeholder>
-        <Image centered src={product.image_link} />
+        {product.image_link ? (
+          <Image centered src={product.image_link} />
+        ) : (
+          <Placeholder.Image square />
+        )}
       </Segment>
       <Container textAlign="center">
-        {product.product_colors &&
-          product.product_colors.map((item) => (
-            <PaletteItem color={item.hex_value} title={item.colour_name} />
-          ))}
+        {(product.product_colors || []).map((item) => (
+          <PaletteItem color={item.hex_value} title={item.colour_name} />
+        ))}
       </Container>
       <Container as="p">{product.description}</Container>
+      {!product.description && (
+        <Placeholder>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+        </Placeholder>
+      )}
       <Header size="large" textAlign="center">
         {product.price &&
           product.price_sign &&
