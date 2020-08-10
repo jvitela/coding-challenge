@@ -32,10 +32,11 @@ export default function ProductsListFilters() {
   const selectBrand = (_, data) => {
     dispatch(fetchBrandProducts(data.value));
   };
+
   return (
     <Form>
-      <Form.Field>
-        <label>Brand Name</label>
+      <Form.Field as="label">
+        Brand Name
         <Dropdown
           search
           selection
@@ -44,8 +45,8 @@ export default function ProductsListFilters() {
           onChange={selectBrand}
         />
       </Form.Field>
-      <Form.Field>
-        <label>Product Name</label>
+      <Form.Field as="label">
+        Product Name
         <input />
       </Form.Field>
     </Form>
