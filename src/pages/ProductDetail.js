@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectProductDetail, selectStatus } from "store/products/selectors";
 import { fetchProduct } from "store/products/slice";
 import { STATUS } from "store/products/constants";
+import PriceTag from "components/PriceTag";
 
 function useProductDetail(pid) {
   const product = useSelector((state) => selectProductDetail(state, pid));
@@ -35,6 +36,7 @@ function useProductDetail(pid) {
 export default function ProductDetail() {
   const { pid } = useParams();
   const product = useProductDetail(pid);
+  console.log("ProductDetail", product);
   return (
     <>
       <Header as="header" textAlign="center">
@@ -87,9 +89,9 @@ export default function ProductDetail() {
         </Placeholder>
       )}
       <Header size="large" textAlign="center">
-        {product.price &&
-          product.price_sign &&
-          `${product.price_sign} ${product.price}`}
+        {product.price && (
+          <PriceTag amount={product.price} currency={product.price_sign} />
+        )}
       </Header>
     </>
   );

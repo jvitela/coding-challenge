@@ -8,7 +8,19 @@
   margin-top: 0.5rem;
 }
 
-.ui.divided.selection.list > .item--product {
+.ui.divided.selection.list > .product {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.product > .product__image {
+  width: 10%;
+}
+.product > .product__name {
+  width: 70%;
+  text-align: left;
+}
+.product > .product__price {
+  width: 20%;
+  text-align: right;
 }
