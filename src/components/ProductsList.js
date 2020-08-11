@@ -1,19 +1,16 @@
 import React from "react";
 import { List, Message } from "semantic-ui-react";
 import ProductItem from "components/ProductItem";
-import { useSelector } from "react-redux";
-import { selectProducts } from "store/products/selectors";
 
-export default function ProductsList() {
-  const productsList = useSelector(selectProducts);
+export default function ProductsList({ products }) {
   return (
     <>
       <List selection divided celled verticalAlign="middle">
-        {productsList.map((item) => (
+        {products.map((item) => (
           <ProductItem {...item} key={item.id} />
         ))}
       </List>
-      {productsList.length === 0 && <EmptyFilterMessage />}
+      {products.length === 0 && <EmptyFilterMessage />}
     </>
   );
 }
