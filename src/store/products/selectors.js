@@ -7,6 +7,13 @@ export const selectFilters = (state) => state[PRODUCTS].filters;
 export const selectBrandOptions = (state) => state[PRODUCTS].brands;
 export const selectActiveBrand = (state) => selectFilters(state).brand;
 export const selectAllProductsByBrand = (state) => state[PRODUCTS].products;
+export const selectRandomBrand = (state) => {
+  const brands = state[PRODUCTS].brands;
+  if (brands.length) {
+    const idx = getRandomInt(brands.length);
+    return brands[idx].value;
+  }
+};
 
 export const selectProducts = createSelector(
   selectActiveBrand,
@@ -51,4 +58,9 @@ function applyFilters(filters = {}, products = []) {
       return filterFn ? filterFn(item, filters) : true;
     })
   );
+}
+
+// From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
