@@ -67,7 +67,11 @@ export default function ProductDetail() {
       </Segment>
       <Container textAlign="center">
         {(product.product_colors || []).map((item) => (
-          <PaletteItem color={item.hex_value} title={item.colour_name} />
+          <PaletteItem
+            color={item.hex_value}
+            title={item.colour_name}
+            key={item.hex_value}
+          />
         ))}
       </Container>
       <Container as="p">{product.description}</Container>
