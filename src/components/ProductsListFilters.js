@@ -9,7 +9,8 @@ export default function ProductsListFilters() {
   const brandOptions = useBrandOptions();
   const dispatch = useDispatch();
   const brand = useSelector(selectActiveBrand);
-  const selectBrand = (_, data) => {
+  const selectBrand = (event, data) => {
+    event.preventDefault();
     dispatch(fetchBrandProducts(data.value));
   };
   const searchName = (_, data) => {
@@ -27,6 +28,7 @@ export default function ProductsListFilters() {
             className="dropdown--brandName"
             value={brand}
             options={brandOptions}
+            selectOnNavigation={false}
             onChange={selectBrand}
           />
         </label>
