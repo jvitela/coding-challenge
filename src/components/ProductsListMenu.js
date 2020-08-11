@@ -23,7 +23,7 @@ export default function ProductsListMenu() {
     <Segment>
       <Menu borderless secondary>
         <Menu.Item header className="header--title">
-          <Header as="h1">{brand || "Products List"}</Header>
+          <Header as="h1">Products List</Header>
         </Menu.Item>
         <Menu.Item>
           <Button

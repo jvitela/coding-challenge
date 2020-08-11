@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -10,27 +10,8 @@ import {
   Popup,
   Placeholder,
 } from "semantic-ui-react";
-import { useSelector, useDispatch } from "react-redux";
-import { selectProductDetail, selectStatus } from "store/products/selectors";
-import { fetchProduct } from "store/products/slice";
-import { STATUS } from "store/products/constants";
-
-function useProductDetail(pid) {
-  const product = useSelector((state) => selectProductDetail(state, pid));
-  const dispatch = useDispatch();
-  const status = useSelector(selectStatus);
-  const isEmpty = status === STATUS.INITIAL && !product;
-  useEffect(
-    function loadProductDetails() {
-      if (isEmpty) {
-        dispatch(fetchProduct(pid));
-      }
-    },
-    [isEmpty, dispatch, pid]
-  );
-
-  return product || {};
-}
+import PriceTag from "components/PriceTag";
+import useProductDetail from "hooks/useProductDetail";
 
 export default function ProductDetail() {
   const { pid } = useParams();
@@ -87,9 +68,9 @@ export default function ProductDetail() {
         </Placeholder>
       )}
       <Header size="large" textAlign="center">
-        {product.price &&
-          product.price_sign &&
-          `${product.price_sign} ${product.price}`}
+        {product.price && (
+          <PriceTag amount={product.price} currency={product.price_sign} />
+        )}
       </Header>
     </>
   );
