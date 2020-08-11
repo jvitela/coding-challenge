@@ -21,7 +21,7 @@ const FILTER_DEBOUNCE_MILLISECONDS = 300;
  */
 export const fetchProduct = createAsyncThunk(
   FETCH_PRODUCT,
-  async (pid) => await makeUpApi.getProduct(pid)
+  _memoize(async (pid) => await makeUpApi.getProduct(pid))
 );
 
 /**
@@ -29,9 +29,7 @@ export const fetchProduct = createAsyncThunk(
  */
 export const fetchBrandProducts = createAsyncThunk(
   FETCH_BRAND_PRODUCTS,
-  _memoize(
-    async (brand, { getState }) => await makeUpApi.getAllProducts({ brand })
-  )
+  _memoize(async (brand) => await makeUpApi.getAllProducts({ brand }))
 );
 
 /**
@@ -39,7 +37,7 @@ export const fetchBrandProducts = createAsyncThunk(
  */
 export const fetchBrands = createAsyncThunk(
   FETCH_BRANDS,
-  async () => await makeUpApi.getAllBrands()
+  _memoize(async () => await makeUpApi.getAllBrands())
 );
 
 /**

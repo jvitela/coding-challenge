@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Container,
@@ -8,47 +8,88 @@ import {
   Image,
   Icon,
   Popup,
+  Placeholder,
 } from "semantic-ui-react";
+import { useSelector, useDispatch } from "react-redux";
+import { selectProductDetail, selectStatus } from "store/products/selectors";
+import { fetchProduct } from "store/products/slice";
+import { STATUS } from "store/products/constants";
 
-const colors = [
-  { hex_value: "#EC8389", colour_name: "Peaching To The Choir " },
-  { hex_value: "#C7797B", colour_name: "Passionate Plum " },
-  { hex_value: "#EE8581", colour_name: "Luv Me Gently " },
-  { hex_value: "#E88C90", colour_name: "Get Me To The Alter " },
-  { hex_value: "#F591A6", colour_name: "Cheeky Cherub " },
-];
+function useProductDetail(pid) {
+  const product = useSelector((state) => selectProductDetail(state, pid));
+  const dispatch = useDispatch();
+  const status = useSelector(selectStatus);
+  const isEmpty = status === STATUS.INITIAL && !product;
+  useEffect(
+    function loadProductDetails() {
+      if (isEmpty) {
+        dispatch(fetchProduct(pid));
+      }
+    },
+    [isEmpty, dispatch, pid]
+  );
+
+  return product || {};
+}
 
 export default function ProductDetail() {
   const { pid } = useParams();
+  const product = useProductDetail(pid);
   return (
     <>
       <Header as="header" textAlign="center">
         <h1>
-          <small className="ui container text small">Brand name</small>
-          <span>Product: {pid}</span>
+          <small className="ui container text small">{product.brand}</small>
+          <span>{product.name}</span>
+          {!product.name && (
+            <Placeholder>
+              <Placeholder.Header>
+                <Placeholder.Line />
+                <Placeholder.Line />
+              </Placeholder.Header>
+            </Placeholder>
+          )}
         </h1>
-        <Rating icon="star" defaultRating={3} maxRating={4} />
+        <Rating
+          icon="star"
+          defaultRating={product.rating}
+          maxRating={5}
+          disabled
+        />
+        {product.rating === null && <small>(n/a)</small>}
       </Header>
       <Segment placeholder>
-        <Image
-          centered
-          src="https://d3t32hsnjxo7q6.cloudfront.net/i/991799d3e70b8856686979f8ff6dcfe0_ra,w158,h184_pa,w158,h184.png"
-        />
+        {product.image_link ? (
+          <Image centered src={product.image_link} />
+        ) : (
+          <Placeholder.Image square />
+        )}
       </Segment>
       <Container textAlign="center">
-        {colors.map((item) => (
-          <PaletteItem color={item.hex_value} title={item.colour_name} />
+        {(product.product_colors || []).map((item) => (
+          <PaletteItem
+            color={item.hex_value}
+            title={item.colour_name}
+            key={item.hex_value}
+          />
         ))}
       </Container>
-      <Container as="p">
-        Create naturally flushed looking cheeks with Saint Cosmetics' blush
-        formulations. Designed to be worn alone or layered for more
-        depth.Features: An ultra-blendable blush with a long-lasting
-        formulaSilky smooth finishCreates a multi-dimensional lookMade in Canada
-        from naturally derived ingredientsChemical Free, Vegan, Gluten Free
-      </Container>
+      <Container as="p">{product.description}</Container>
+      {!product.description && (
+        <Placeholder>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+        </Placeholder>
+      )}
       <Header size="large" textAlign="center">
-        €123.456
+        {product.price &&
+          product.price_sign &&
+          `${product.price_sign} ${product.price}`}
       </Header>
     </>
   );

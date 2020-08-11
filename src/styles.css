@@ -7,3 +7,8 @@
   display: block;
   margin-top: 0.5rem;
 }
+
+.ui.divided.selection.list > .item--product {
+  display: flex;
+  align-items: center;
+}

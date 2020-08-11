@@ -1,16 +1,17 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { PRODUCTS, STATUS } from "store/products/constants";
+import { PRODUCTS } from "store/products/constants";
 
 export const selectStatus = (state) => state[PRODUCTS].status;
 export const selectError = (state) => state[PRODUCTS].error;
 export const selectFilters = (state) => state[PRODUCTS].filters;
 export const selectBrandOptions = (state) => state[PRODUCTS].brands;
 export const selectActiveBrand = (state) => selectFilters(state).brand;
+export const selectAllProductsByBrand = (state) => state[PRODUCTS].products;
 
 export const selectProducts = createSelector(
   selectActiveBrand,
   selectFilters,
-  (state) => state[PRODUCTS].products,
+  selectAllProductsByBrand,
   (brand, filters, productsByBrand) => {
     const products = productsByBrand[brand]
       ? Object.values(productsByBrand[brand])
@@ -20,20 +21,13 @@ export const selectProducts = createSelector(
 );
 
 export const selectProductDetail = createSelector(
-  selectError,
-  selectStatus,
-  selectProducts,
+  selectAllProductsByBrand,
   (_, pid) => pid,
-  (error, status, products, pid) => {
-    const loading = status === STATUS.PRODUCT_LOADING;
-    const data = products[pid];
-    const shouldFetch = !data && !loading;
-    return {
-      error,
-      loading,
-      data,
-      shouldFetch,
-    };
+  (productsByBrand, pid) => {
+    const brand = Object.keys(productsByBrand).find(
+      (brand) => pid in productsByBrand[brand]
+    );
+    return brand && productsByBrand[brand][pid];
   }
 );
 
