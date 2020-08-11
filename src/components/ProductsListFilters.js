@@ -35,6 +35,7 @@ export default function ProductsListFilters() {
         label="Product Name"
         id="productName"
         disabled={!brand}
+        autoComplete="off"
         onChange={searchName}
       />
     </Form>
