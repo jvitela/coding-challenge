@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useSelector } from "react-redux";
-import { Sticky, Ref, Dimmer, Loader } from "semantic-ui-react";
+import { Segment, Sticky, Ref, Dimmer, Loader } from "semantic-ui-react";
 import ProductsList from "components/ProductsList";
 import ProductsListMenu from "components/ProductsListMenu";
 import { STATUS } from "store/products/constants";
@@ -17,9 +17,11 @@ export default function ProductsListPage() {
   );
   return (
     <Ref innerRef={contextRef}>
-      <div>
+      <div className="list-page">
         <Sticky context={contextRef}>
-          <ProductsListMenu />
+          <Segment raised>
+            <ProductsListMenu />
+          </Segment>
         </Sticky>
         {isReady && <ProductsList products={products} />}
         {isLoading && (

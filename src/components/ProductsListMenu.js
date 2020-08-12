@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  Header,
-  Menu,
-  Segment,
-  Message,
-  Button,
-  Icon,
-} from "semantic-ui-react";
+import { Header, Menu, Message, Button, Icon } from "semantic-ui-react";
 import ProductsListFilters from "components/ProductsListFilters";
 import { selectStatus, selectActiveBrand } from "store/products/selectors";
 import { STATUS } from "store/products/constants";
@@ -22,7 +15,7 @@ export default function ProductsListMenu() {
   const toggleFilters = () => openFilters(!filterOpened);
 
   return (
-    <Segment>
+    <div className="list-header">
       <Menu borderless secondary>
         <Menu.Item header className="header--title">
           <Header as="h1">Products List</Header>
@@ -37,7 +30,7 @@ export default function ProductsListMenu() {
       </Menu>
       {!brand && <SelectBrandMessage />}
       {filterOpened && <ProductsListFilters />}
-    </Segment>
+    </div>
   );
 }
 
