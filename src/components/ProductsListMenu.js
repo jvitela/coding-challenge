@@ -15,7 +15,9 @@ import { STATUS } from "store/products/constants";
 export default function ProductsListMenu() {
   const status = useSelector(selectStatus);
   const brand = useSelector(selectActiveBrand);
-  const [filterOpened, openFilters] = useState(status === STATUS.INITIAL);
+  const [filterOpened, openFilters] = useState(
+    [STATUS.INITIAL, STATUS.PRODUCT_READY].includes(status)
+  );
   const icon = filterOpened ? "close" : "sliders horizontal";
   const toggleFilters = () => openFilters(!filterOpened);
 
