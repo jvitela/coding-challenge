@@ -8,7 +8,9 @@ export default function useBrandOptions() {
   const dispatch = useDispatch();
   const status = useSelector(selectStatus);
   const brandOptions = useSelector(selectBrandOptions);
-  const isEmpty = status === STATUS.INITIAL && brandOptions.length === 0;
+  const isEmpty =
+    [STATUS.INITIAL, STATUS.PRODUCT_READY].includes(status) &&
+    brandOptions.length === 0;
   useEffect(
     function loadBrandNames() {
       if (isEmpty) {

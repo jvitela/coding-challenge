@@ -11,16 +11,18 @@ export default function ProductsListPage() {
   const contextRef = useRef();
   const status = useSelector(selectStatus);
   const products = useProductsList();
+  const isReady = [STATUS.BRAND_READY].includes(status);
+  const isLoading = [STATUS.BRANDS_LIST_LOADING, STATUS.BRAND_LOADING].includes(
+    status
+  );
   return (
     <Ref innerRef={contextRef}>
       <div>
         <Sticky context={contextRef}>
           <ProductsListMenu />
         </Sticky>
-        {status === STATUS.BRAND_READY && <ProductsList products={products} />}
-        {[STATUS.BRANDS_LIST_LOADING, STATUS.BRAND_LOADING].includes(
-          status
-        ) && (
+        {isReady && <ProductsList products={products} />}
+        {isLoading && (
           <Dimmer active inverted>
             <Loader inverted>Loading</Loader>
           </Dimmer>

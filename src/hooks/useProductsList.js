@@ -17,7 +17,7 @@ export default function useProductsList() {
   const brand = useSelector(selectRandomBrand);
   const isEmpty =
     location.search === "?random" && // Only fetch automatically if this param is sent
-    status === STATUS.BRANDS_LIST_READY &&
+    [STATUS.BRANDS_LIST_READY, STATUS.PRODUCT_READY].includes(status) &&
     productsList.length === 0;
 
   useEffect(
