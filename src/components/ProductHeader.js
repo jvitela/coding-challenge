@@ -8,7 +8,8 @@ export default function ProductHeader({ name, brand, rating }) {
   return (
     <Header as="header" textAlign="center">
       <h1>
-        <small className="ui container text small">{brand}</small>
+        <small>{brand}</small>
+        <br />
         <span>{name}</span>
         {!name && <NamePlaceholder />}
       </h1>

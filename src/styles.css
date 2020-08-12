@@ -24,3 +24,26 @@
   width: 20%;
   text-align: right;
 }
+
+.detail-page {
+  max-width: 30rem;
+  margin: auto;
+}
+@media only screen and (max-width: 767px) {
+  .detail-page {
+    width: auto !important;
+    margin-left: 1em !important;
+    margin-right: 1em !important;
+  }
+}
+.list-header {
+  max-width: 30rem;
+  margin: auto;
+}
+@media only screen and (max-width: 767px) {
+  .list-header {
+    width: auto !important;
+    margin-left: 1em !important;
+    margin-right: 1em !important;
+  }
+}

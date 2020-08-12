@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Segment, Image, Placeholder } from "semantic-ui-react";
+import { Segment, Image, Placeholder } from "semantic-ui-react";
 import DescriptionPlaceholder from "components/DescriptionPlaceholder";
 import PaletteItem from "components/PaletteItem";
 
@@ -10,14 +10,14 @@ export default function ProductInformation({
 }) {
   return (
     <>
-      <Segment placeholder>
+      <Segment vertical placeholder>
         {image_link ? (
           <Image centered src={image_link} />
         ) : (
           <Placeholder.Image square />
         )}
       </Segment>
-      <Container textAlign="center">
+      <Segment vertical textAlign="center">
         {(product_colors || []).map((item) => (
           <PaletteItem
             color={item.hex_value}
@@ -25,8 +25,10 @@ export default function ProductInformation({
             key={item.hex_value}
           />
         ))}
-      </Container>
-      <Container as="p">{description}</Container>
+      </Segment>
+      <Segment vertical>
+        <p>{description}</p>
+      </Segment>
       {!description && <DescriptionPlaceholder />}
     </>
   );

@@ -9,10 +9,10 @@ export default function ProductDetail() {
   const { pid } = useParams();
   const product = useProductDetail(pid);
   return (
-    <>
+    <div className="detail-page">
       <ProductHeader {...product} />
       <ProductInformation {...product} />
       <ProductFooter {...product} />
-    </>
+    </div>
   );
 }
